@@ -1,18 +1,30 @@
 // DO YOUR MAGIC
 const express = require("express");
-const { getAll, getById, create } = require("./cars-router");
-const db = require("../../data/db-config.js");
+const Cars = require("./cars-router");
+const {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+} = require("./cars-middleware");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  db("cars")
-    .then((cars) => {
-      res.json(cars);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
+router.get("/", async (req, res) => {
+  try {
+    const data = await Cars.get();
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
 });
+
+// router.get("/:id", async (req,res) => {
+
+// })
+
+// router.create("/", async (req,res) => {
+
+// })
 
 module.exports = router;
